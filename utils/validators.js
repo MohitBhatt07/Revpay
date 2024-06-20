@@ -13,13 +13,17 @@ const validatePassword = (password) => {
 
 const validateBankAccountNumber = (bankAccountNumber) => {
   if (!/^\d{1,10}$/.test(bankAccountNumber)) {
-    throw new Error('Bank account number must be numeric and up to 10 digits');
+    const error =  new Error('Bank Account Number must be numeric and up to 8 digits');
+    error.detail = 'Bank Account Number must be numeric and up to 10 digits';
+    throw error;
   }
 };
 
 const validateSortCode = (sortCode) => {
   if (!/^\d{1,8}$/.test(sortCode)) {
-    throw new Error('Sort code must be numeric and up to 8 digits');
+    const error =  new Error('Sort code must be numeric and up to 8 digits');
+    error.detail = 'Sort code must be numeric and up to 10 digits';
+    throw error;
   }
 };
 
@@ -36,10 +40,19 @@ const validateTransactionType = (type) => {
 };
 
 const validateAmount = (amount) => {
-  if (typeof amount !== 'number' || amount <= 0) {
+  const numAmount = Number(amount);
+  if (isNaN(numAmount) || numAmount <= 0) {
     throw new Error('Amount must be a positive number');
   }
 };
+
+const validateBooleans = (...values)=>{
+  for(let i=0; i<values.length; i++) {
+    if(values[i] !== true && values[i] !== false && values[i] !== "true" && values[i] !== "false") {
+      throw new Error("allowed values are 'true' and 'false' ");
+    }
+  }
+}
 
 module.exports = {
   validateUsername,
@@ -49,4 +62,5 @@ module.exports = {
   validateActivationStatus,
   validateTransactionType,
   validateAmount,
+  validateBooleans
 };

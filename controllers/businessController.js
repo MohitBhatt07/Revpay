@@ -1,9 +1,12 @@
 const businessService = require("../services/businessService");
 const jwt = require('jsonwebtoken');
+const { validateUsername, validatePassword } = require("../utils/validators");
+
 const registerBusiness = async (req, res) => {
   try {
-    
     const { username, password } = req.body;
+    validateUsername(username);
+    validatePassword(password);
     const business = await businessService.registerBusiness(username, password);
     res
       .status(201)
@@ -18,10 +21,6 @@ const registerBusiness = async (req, res) => {
 
 const loginBusiness = async (req, res) => {
   try {
-    // const { error } = businessSchema.validate(req.body);
-    // if (error) {
-    //   return res.status(400).json({ message: error.details[0].message });
-    // }
 
     const { username, password } = req.body;
     const business = await businessService.authenticateBusiness(

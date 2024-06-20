@@ -1,8 +1,11 @@
 const accountService = require("../services/accountService");
+const { validateBankAccountNumber, validateSortCode, validateActivationStatus, validateBooleans, validateAmount } = require("../utils/validators");
 
 const createAccount = async (req, res) => {
   try {
     const { businessId, bankAccountNumber, sortCode } = req.body;
+    validateBankAccountNumber(bankAccountNumber);
+    validateSortCode(sortCode);
     const account = await accountService.createAccount(
       businessId,
       bankAccountNumber,
@@ -18,6 +21,7 @@ const createAccount = async (req, res) => {
 const updateAccountStatus = async (req, res) => {
   try {
     const { accountId, status } = req.body;
+    validateActivationStatus(status);
     const account = await accountService.updateAccountStatus(accountId, status);
     res.status(200).json({ message: "Account status updated", account });
   } catch (error) {
@@ -28,6 +32,7 @@ const updateAccountStatus = async (req, res) => {
 const updateTransactionTypes = async (req, res) => {
   try {
     const { accountId, creditAllowed, debitAllowed } = req.body;
+    validateBooleans(creditAllowed,debitAllowed);
     const account = await accountService.updateTransactionTypes(
       accountId,
       creditAllowed,
@@ -42,6 +47,7 @@ const updateTransactionTypes = async (req, res) => {
 const setDailyWithdrawalLimit = async (req, res) => {
   try {
     const { accountId, limit } = req.body;
+    validateAmount(limit);
     const account = await accountService.setDailyWithdrawalLimit(
       accountId,
       limit
