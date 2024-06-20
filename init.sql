@@ -1,15 +1,14 @@
 CREATE TABLE businesses (
-  id SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY,
   username VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE accounts (
-  id SERIAL PRIMARY KEY,
-  business_id INTEGER REFERENCES businesses(id),
-  unique_identifier UUID UNIQUE NOT NULL,
-  bank_account_number VARCHAR(10) NOT NULL,
-  sort_code VARCHAR(8) NOT NULL,
+  id UUID PRIMARY KEY,
+  business_id UUID REFERENCES businesses(id),
+  bank_account_number VARCHAR(10) UNIQUE NOT NULL,
+  sort_code VARCHAR(8) UNIQUE NOT NULL,
   activation_status VARCHAR(10) NOT NULL DEFAULT 'ACTIVE',
   credit_allowed BOOLEAN NOT NULL DEFAULT TRUE,
   debit_allowed BOOLEAN NOT NULL DEFAULT TRUE,
@@ -18,8 +17,8 @@ CREATE TABLE accounts (
 );
 
 CREATE TABLE transactions (
-  id SERIAL PRIMARY KEY,
-  account_id INTEGER REFERENCES accounts(id),
+  id UUID PRIMARY KEY,
+  account_id UUID REFERENCES accounts(id),
   type VARCHAR(10) NOT NULL,
   amount DECIMAL(10, 2) NOT NULL,
   beneficiary_account_number VARCHAR(10) NOT NULL,

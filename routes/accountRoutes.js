@@ -3,6 +3,9 @@ const router = express.Router();
 const accountController = require('../controllers/accountController');
 const auth = require('../middleware/auth');
 
+
+router.get('/list' , auth , accountController.listAllAccounts);
+router.get('/details/:id', auth , accountController.getAccountDetails);
 router.post('/create', auth, accountController.createAccount);
 router.put('/status', auth, accountController.updateAccountStatus);
 router.put('/transaction-types', auth, accountController.updateTransactionTypes);

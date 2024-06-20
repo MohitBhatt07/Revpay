@@ -1,9 +1,11 @@
 const Transaction = require('../models/transaction');
 const Account = require('../models/account');
+const { v4: uuidv4 } = require('uuid');
 
 const createTransaction = async (accountId, type, amount, beneficiaryAccountNumber, beneficiarySortCode) => {
-  const accountResult = await Account.getAccountBalance(accountId);
+  const accountResult = await Account.getAccountDetails(accountId);
   const account = accountResult.rows[0];
+  console.log(account);
 
   if (!account) {
     throw new Error('Account not found');
@@ -21,7 +23,9 @@ const createTransaction = async (accountId, type, amount, beneficiaryAccountNumb
     throw new Error('Credit transactions are not allowed for this account');
   }
 
+  
   if (type === 'WITHDRAWAL') {
+    
     const today = new Date().toISOString().split('T')[0];
     const withdrawalsResult = await Transaction.getWithdrawalsForDay(accountId, today);
     const totalWithdrawnToday = withdrawalsResult.rows[0].total || 0;
@@ -35,11 +39,14 @@ const createTransaction = async (accountId, type, amount, beneficiaryAccountNumb
     }
 
     await Account.updateBalance(accountId, -amount);
+
   } else {
+    
     await Account.updateBalance(accountId, amount);
   }
 
-  const result = await Transaction.createTransaction(accountId, type, amount, beneficiaryAccountNumber, beneficiarySortCode);
+  const id = uuidv4();
+  const result = await Transaction.createTransaction(id,accountId, type, amount, beneficiaryAccountNumber, beneficiarySortCode);
   return result.rows[0];
 };
 

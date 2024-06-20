@@ -2,10 +2,21 @@ const { v4: uuidv4 } = require('uuid');
 const Account = require('../models/account');
 
 const createAccount = async (businessId, bankAccountNumber, sortCode) => {
-  const uniqueIdentifier = uuidv4();
-  const result = await Account.createAccount(businessId, uniqueIdentifier, bankAccountNumber, sortCode);
+  const id = uuidv4();
+  const result = await Account.createAccount(businessId, id, bankAccountNumber, sortCode);
   return result.rows[0];
 };
+
+const getAccountDetails = async(accountId) =>{
+
+  const result = await Account.getAccountDetails(accountId);
+  return result.rows[0];
+}
+
+const listAllAccounts = async() =>{
+  const result = await Account.listAllAccountDetails();
+  return result.rows;
+}
 
 const updateAccountStatus = async (accountId, status) => {
   const result = await Account.updateAccountStatus(accountId, status);
@@ -33,4 +44,6 @@ module.exports = {
   updateTransactionTypes,
   setDailyWithdrawalLimit,
   getAccountBalance,
+  getAccountDetails,
+  listAllAccounts
 };

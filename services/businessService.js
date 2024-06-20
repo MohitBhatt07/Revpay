@@ -1,10 +1,11 @@
 const bcrypt = require('bcryptjs');
+const { v4: uuidv4 } = require('uuid');
 const Business = require('../models/business');
 
 const registerBusiness = async (username, password) => {
-  
+  const id = uuidv4();
   const hashedPassword = await bcrypt.hash(password, 10);
-  const result = await Business.createBusiness(username, hashedPassword);
+  const result = await Business.createBusiness(username, hashedPassword ,id);
   return result.rows[0];
 };
 
