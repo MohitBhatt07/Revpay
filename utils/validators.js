@@ -22,7 +22,7 @@ const validateBankAccountNumber = (bankAccountNumber) => {
 const validateSortCode = (sortCode) => {
   if (!/^\d{1,8}$/.test(sortCode)) {
     const error =  new Error('Sort code must be numeric and up to 8 digits');
-    error.detail = 'Sort code must be numeric and up to 10 digits';
+    error.detail = 'Sort code must be numeric and up to 8 digits';
     throw error;
   }
 };
@@ -33,16 +33,16 @@ const validateActivationStatus = (status) => {
   }
 };
 
-const validateTransactionType = (type) => {
-  if (type !== 'CREDIT' && type !== 'DEBIT') {
-    throw new Error('Transaction type must be either CREDIT or DEBIT');
-  }
-};
+// const validateTransactionType = (type) => {
+//   if (type !== 'CREDIT' && type !== 'DEBIT') {
+//     throw new Error('Transaction type must be either CREDIT or DEBIT');
+//   }
+// };
 
 const validateAmount = (amount) => {
   const numAmount = Number(amount);
   if (isNaN(numAmount) || numAmount <= 0) {
-    throw new Error('Amount must be a positive number');
+    throw new Error('Amount must be a positive number and greater than zero');
   }
 };
 
@@ -60,7 +60,6 @@ module.exports = {
   validateBankAccountNumber,
   validateSortCode,
   validateActivationStatus,
-  validateTransactionType,
   validateAmount,
   validateBooleans
 };

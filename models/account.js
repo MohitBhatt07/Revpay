@@ -10,7 +10,7 @@ const updateAccountStatus = (accountId, status) =>
   query(
     "UPDATE accounts SET activation_status = $1 WHERE id = $2 RETURNING *",
     [status, accountId]
-  );
+  );  
 
 const updateTransactionTypes = (accountId, creditAllowed, debitAllowed) =>
   query(

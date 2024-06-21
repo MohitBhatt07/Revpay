@@ -1,11 +1,13 @@
 const Transaction = require('../models/transaction');
 const Account = require('../models/account');
 const { v4: uuidv4 } = require('uuid');
+const { validateAmount } = require('../utils/validators');
 
 const createTransaction = async (accountId, type, amount, beneficiaryAccountNumber, beneficiarySortCode) => {
   const accountResult = await Account.getAccountDetails(accountId);
   const account = accountResult.rows[0];
-  console.log(account);
+  
+  validateAmount(amount);
 
   if (!account) {
     throw new Error('Account not found');
@@ -40,9 +42,12 @@ const createTransaction = async (accountId, type, amount, beneficiaryAccountNumb
 
     await Account.updateBalance(accountId, -amount);
 
-  } else {
+  } else if(type === "DEPOSIT")  {
     
     await Account.updateBalance(accountId, amount);
+  }
+  else{
+    throw new Error("Only DEPOSIT and WITHDRAWAL are allowed");
   }
 
   const id = uuidv4();
